@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Typewriter</title>
+</head>
+<body>
+	<div>
+		<input id="input1" type="text" oninput="doInput()" />
+	</div>
+	
+	<div id="messages">
+	</div>
+	
+	<script type="text/javascript">
+	
+		var typewriterURL = document.URL.replace("http", "ws").replace("websocket.html", "typewriter");
+		var webSocket = new WebSocket(typewriterURL);
+
+		webSocket.onopen = function(event) {
+			onOpen(event)
+		};
+
+		webSocket.onmessage = function(event) {
+			onMessage(event)
+		};
+
+		function onMessage(event) {
+			document.getElementById('messages').innerHTML = '<br />'
+					+ event.data;
+		}
+
+		function onOpen(event) {
+			document.getElementById('messages').innerHTML = 'Connection established';
+		}
+
+		function doInput() {
+			webSocket.send(document.getElementById('input1').value);
+			return false;
+		}
+	</script>
+</body>
+</html>
